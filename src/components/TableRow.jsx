@@ -7,7 +7,7 @@ const TableRow = ({item}) => {
 
     useEffect(()=>{
         function toRenewFunction(){
-            var nbJourRestant = Math.trunc(item.stock/item.prescription_per_day)
+            var nbJourRestant = Math.trunc(item.stock/item.dosage)
             setRenew(moment(moment(item.renewed).add(nbJourRestant, 'days').format("YYYY-MM-DDTHH:mm:ss.SSSSZ"))._i)
             // console.log(moment(moment(moment(item.renewed).add(nbJourRestant, 'days').format("YYYY-MM-DDTHH:mm:ss.SSSSZ"))._i)._i)
         }

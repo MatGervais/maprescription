@@ -1,27 +1,71 @@
 import './App.css';
-import { useState } from 'react';
-import medocs from "./data/medocs.json"
+import { useState, useEffect } from 'react';
+// import medocs from "./data/medocs.json"
 import Item from './components/Item';
 import TableRow from './components/TableRow';
+import axios from 'axios';
+import AddItem from './components/addItem';
+import MedicationContext from './contexts/MedicationContext';
 
 function App() {
 
-  const [view,setView] = useState("gallery")
+  const [view,setView] = useState({type:"gallery", icon:"table-list", label:"Tableau"})
+  const [medocs,setMedocs] =useState([])
+  const [requestMsg,setRequestMsg] = useState({
+    delete:"",
+    modify:""
+  })
+
+  const contextValue = {
+    medication : medocs,
+    updateMedication : setMedocs
+  }
 
   function changeView(){
-    if(view === "gallery"){
-      setView("table")
+    if(view.type === "gallery"){
+      setView({type:"table", icon:"grip", label:"Galerie"})
     }
-    else setView('gallery')
+    else setView({type:"gallery", icon:"table-list", label:"Tableau"})
   }
+
+  useEffect(() => {
+    console.log("UseEffect");
+    async function getMeds() {
+      const datas = await axios.get(`${process.env.REACT_APP_API_URL}/medication`)
+      setMedocs(datas.data)
+    }
+    getMeds()
+  }, []);
+
+
+  async function removeItem(event) {
+    const deleteMedication = medocs.filter(x => x.id != event.target.id);
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/medication/${event.target.id}`)
+        .then((res)=>{
+          setMedocs(deleteMedication)
+          // setRequestMsg({...requestMsg, delete:res.data.msg})
+        })
+    } catch (error) {
+        console.log(error);
+    }
+    
+}
+
+
   return (
+    <MedicationContext.Provider value={contextValue}>
     <div className="App">
-      <button onClick={changeView} className='btn btn-primary'>{view === "gallery" ? "Tableau":"Galerie"}</button>
-      {/* {new Date().toLocaleDateString()} */}
-        {view==="gallery" ? (
-          medocs.map((medoc,idx)=>(
-            <Item key={idx} name={medoc.name} prescPerDay={medoc.prescription_per_day} renewed={medoc.renewed} stock={medoc.stock} />
-          ))
+      <button onClick={changeView} className='btn btn-primary'><i className={`fa fa-${view?.icon} mx-1`}></i> {view.label}</button>
+      <p>{requestMsg.delete}</p>
+        {view.type==="gallery" ? (<>
+            <AddItem medication={medocs} setMedication={setMedocs}/>
+          <div className='row d-flex flex-wrap-reverse justify-content-center mx-2'>
+            {medocs?.map((medoc,idx)=>(
+              <Item medication={medocs} setMedication={setMedocs} key={idx} id={medoc.id} removeFunction={removeItem} name={medoc.name} prescPerDay={medoc.dosage} renewed={medoc.renewed} stock={medoc.stock} />
+              ))}
+          </div>
+            </>
         )
         :(
           <table className='table'>
@@ -42,6 +86,7 @@ function App() {
         )
         }  
     </div>
+    </MedicationContext.Provider>
   );
 }
 
