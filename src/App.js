@@ -6,9 +6,11 @@ import TableRow from './components/TableRow';
 import axios from 'axios';
 import AddItem from './components/addItem';
 import MedicationContext from './contexts/MedicationContext';
-// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Prescription from './pages/Prescription';
+import Login from './pages/Login';
 // import Login from './pages/Login';
-// import About from './pages/About';
+import About from './pages/About';
 // import Prescription from './pages/Prescription';
 
 function App() {
@@ -59,14 +61,14 @@ function App() {
 
   return (
     <MedicationContext.Provider value={contextValue}>
-    <div className="App">
-      {/* <Router>
+      <Router>
         <Routes>
-          <Route exact path='/' element={<About />}/>
-          <Route path='/login' element={<Login />}/>
-          <Route path='/prescription' element={<Prescription />}/>
+          <Route exact path="/" element={<About />} />
+          {/* <Route path="/prescription" element={<Prescription/>} />
+          <Route path="/login" element={<Login />} /> */}
         </Routes>
-      </Router> */}
+      </Router>
+    {/* <div className="App">
       <button onClick={changeView} className='btn btn-primary'><i className={`fa fa-${view?.icon} mx-1`}></i> {view.label}</button>
       <p>{requestMsg.delete}</p>
         {view.type==="gallery" ? (<>
@@ -96,7 +98,7 @@ function App() {
           </table>
         )
         }  
-    </div>
+    </div> */}
     </MedicationContext.Provider>
   );
 }

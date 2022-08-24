@@ -9,7 +9,7 @@ const Prescription = () => {
 
     const [authenticated, setauthenticated] = useState(null);
     useEffect(() => {
-      const loggedInUser = localStorage.getItem("authenticated");
+      const loggedInUser = localStorage.getItem("accessToken");
       if (loggedInUser) {
         setauthenticated(loggedInUser);
         console.log(authenticated);
@@ -46,7 +46,7 @@ const Prescription = () => {
     
 }
     if (!authenticated) {
-        return <Navigate replace to="/login" />;
+        return <Navigate to="/login" />;
     }
     else {
         return (
