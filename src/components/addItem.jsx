@@ -71,7 +71,7 @@ const AddItem = ({medication, setMedication}) => {
                         <button type="button" onClick={toggleAddItem} className="btn btn-light" data-bs-dismiss="alert"><i className="fa fa-xmark mx-1"></i></button>
                     </div>
 
-                    <FormAddItem method="post" toggleHide={toggleAddItem} setMedication={setMedication} medication={medication} />
+                    <FormAddItem method="post" toggleHide={toggleAddItem} setEdit={setItemToggle} setMedication={setMedication} medication={medication} />
                     {/* <form onSubmit={submitForm}>
 
                     <h4 className="card-title">Ajout d'un médicament</h4>

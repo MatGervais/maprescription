@@ -13,14 +13,18 @@
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
     "react-fontawesome": "^1.7.1",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "recoil": "^0.7.5",
+    "serve-build": "^0.1.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve":"serve-build"
   },
   "eslintConfig": {
     "extends": [
