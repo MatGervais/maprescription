@@ -13,6 +13,10 @@ const Item = ({name,stock,renewed,prescPerDay,id,setMedication,medication, remov
       function toRenewFunction(){
         var nbJourRestant = Math.trunc(stock/prescPerDay)
         setRenew(moment(moment(renewed).add(nbJourRestant, 'days').format("YYYY-MM-DDTHH:mm:ss.SSSSZ"))._i)
+        console.log(new Date(renewed).getTime());
+        /* ----------------------------À GARDER POUR LE BACK------------------------- */
+        /*       console.log(moment(new Date(toRenew).getTime()).format("DD"));       */
+        /* -------------------------------------------------------------------------- */
     }
     toRenewFunction()
         const diffTime = Math.abs(new Date(toRenew) - new Date());

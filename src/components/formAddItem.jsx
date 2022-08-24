@@ -40,17 +40,15 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
             .then(res=>{
                 // console.log(res.data.modifyMed)
                 const newState = medication.map(obj => {
-                    // 👇️ if id equals 2, update country property
                     if (obj.id === id) {
                       return res.data.modifyMed;
                     }
-              
-                    // 👇️ otherwise return object as is
                     return obj;
                   });
 
                   setMedication(newState)
-            })
+                })
+                await toggleHide()
         }
         if(method==="post"){
             await axios.post(`${process.env.REACT_APP_API_URL}/medication`, form)
@@ -59,7 +57,7 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
                 setMedication([...medication,res.data.newMedication])
             })
         }
-        setEdit(false)
+        setEdit("plus")
     }
 
     function changeDate(date){
@@ -70,7 +68,7 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
     return (
                     <form onSubmit={submitForm}>
 
-                    <h4 className="card-title">Ajout d'un médicament</h4>
+                    <h4 className="card-title">{method==="post"?"Ajout d'un médicament":"Modification du médicament"}</h4>
                     <input className='form-control mt-3' onChange={onChange} type="text" value={form.name} name="name" id="name" placeholder='Nom du médicament' />
                     {formError.name !== "" ? <div className="text-danger">{formError.name}</div>:""}
                 

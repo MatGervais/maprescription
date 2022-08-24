@@ -1,11 +1,15 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 // import medocs from "./data/medocs.json"
 import Item from './components/Item';
 import TableRow from './components/TableRow';
 import axios from 'axios';
 import AddItem from './components/addItem';
 import MedicationContext from './contexts/MedicationContext';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import Login from './pages/Login';
+// import About from './pages/About';
+// import Prescription from './pages/Prescription';
 
 function App() {
 
@@ -56,6 +60,13 @@ function App() {
   return (
     <MedicationContext.Provider value={contextValue}>
     <div className="App">
+      {/* <Router>
+        <Routes>
+          <Route exact path='/' element={<About />}/>
+          <Route path='/login' element={<Login />}/>
+          <Route path='/prescription' element={<Prescription />}/>
+        </Routes>
+      </Router> */}
       <button onClick={changeView} className='btn btn-primary'><i className={`fa fa-${view?.icon} mx-1`}></i> {view.label}</button>
       <p>{requestMsg.delete}</p>
         {view.type==="gallery" ? (<>
