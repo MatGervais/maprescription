@@ -4,14 +4,15 @@ const Login = () => {
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
   const [authenticated, setauthenticated] = useState(localStorage.getItem(localStorage.getItem("authenticated")|| false));
-  const users = [{ username: "Jane", password: "testpassword" }];
+  // const users = [{ username: "Jane", password: "testpassword" }];
   const handleSubmit = (e) => {
     e.preventDefault()
-    const account = users.find((user) => user.username === username);
-    if (account && account.password === password) {
-        setauthenticated(true)
-        localStorage.setItem("authenticated", true);
-    }
+    // e.preventDefault()
+    // const account = users.find((user) => user.username === username);
+    // if (account && account.password === password) {
+    //     setauthenticated(true)
+    //     localStorage.setItem("authenticated", true);
+    // }
   };
 
   return (
