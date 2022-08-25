@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/nav/Navbar';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import WOW from 'wowjs';
+import 'animate.css';
 
 const About = () => {
+
+    useEffect(() => {
+        new WOW.WOW({
+          live: true,
+          offset:       100,
+
+        }).init();
+      }, [])
 
     const [view,setView] = useState("card")
     const [register, setRegister] = useState({
         email:"",
         password:""
+    })
+    const [message, setMessage] =useState({
+        isSubmit : false,
+        errorPassword:"",
+        registrationSuccess:""
     })
 
     function toggleView(){
@@ -26,20 +42,22 @@ const About = () => {
 
     async function handleSubmit(e){
         e.preventDefault()
-        await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, register).then((res)=>{
-            console.log(res.data.data.message);
-        })
+        // await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, register).then((res)=>{
+        //     // console.log(res.data.message);
+        //     setMessage({...message, registrationSuccess:res.data.message})
+        // })
+        setMessage({...message, isSubmit:true, registrationSuccess:"Pré-inscription validée"})
     }
     return (
         <>
-
+{/* <h1 class="animate__animated animate__bounce">An animated element</h1> */}
             <div className="px-4 pt-5 text-center">
                 <div className="container px-5">
                     <img src={"images/author.png"} alt="" />
                 </div>
                 <h1 className="display-4 fw-bold">Ya prescription, c'est quoi ?</h1>
                 <div className="col-lg-6 mx-auto">
-                    <p className="lead mb-4"><strong>YaPrescription</strong> est une application web vous permettant de gérer vos ordonnances et vos stocks. Elle est, avant tout pensée, pour être utilisée par des personnes qui ont de nombreuses ordonnances ou alors un nombre conséquent de médicaments.</p>
+                    <p className="lead mb-4"><strong>YaPrescription</strong> est une application web vous permettant de gérer vos ordonnances et vos stocks de médicaments. Elle est avant tout pensée, pour être utilisée par des personnes qui ont de nombreuses ordonnances ou alors un nombre conséquent de médicaments à gérer de leur quotidien.</p>
                     <h2 className="display-5">Comment ça fonctionne ?</h2>
                     <div className="row my-5">
                         <div className="col-md-6">
@@ -124,26 +142,26 @@ const About = () => {
                 </div>
             </div>
 
-            <div className='divider'></div>
+            <div className='divider wow animate__animated animate__fadeInUp'></div>
 
-            <div className="container col-xxl-8 px-4 py-5">
+            <div className="container wow animate__animated animate__fadeInUp col-xxl-8 px-4 py-5">
                 <div className="row flex-lg-row align-items-center g-5 py-5">
-                <div className="col-10 col-sm-8 col-lg-6">
+                <div className="wow animate__animated animate__fadeInLeft col-10 col-sm-8 col-lg-6">
                     <img src={"images/mat.png"} className="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy"/>
                 </div>
-                <div className="col-lg-6">
+                <div className="wow animate__animated animate__fadeInRight col-lg-6">
                     <h1 className="display-5 fw-bold lh-1 mb-3">Développé par qui ?</h1>
                     <h2 className="h2">Mathieu <strong>Gervais</strong></h2>
                     <p className="lead">Jeune développeur web atteint de la mucoviscidose.</p>
-                    <q className="lead">J'ai pensé à faire un système d'inventaire un jour en faisant mon pilulier. Je me suis dit que j'aimerais bien avoir un outil qui me permettrait, en renseignant le stock de chacun de mes médicaments, de me dire quand est-ce que je serai en rupture de tel ou tel médicament. C'est à ce moment là que je me suis décidé de développer cette plateforme afin de me tester et en même temps pour une question pratique.</q>
+                    <q className="lead">J'ai pensé à faire un système d'inventaire un jour en faisant mon pilulier. Je me suis dit que j'aimerais bien avoir un outil qui me permettrait, en renseignant le stock de chacun de mes médicaments, de me dire quand est-ce que je serai en rupture de tel ou tel médicament. C'est à ce moment là que je me suis décidé à développer cette plateforme afin de me tester et en même temps pour une question pratique.</q>
                 </div>
                 </div>
             </div>
 
-            <div className="divider"></div>
+            <div className="divider wow animate__animated animate__fadeInUp"></div>
 
 
-            <div className="container col-xl-10 col-xxl-8 px-4 py-5">
+            <div className="container wow animate__animated animate__fadeInUp col-xl-10 col-xxl-8 px-4 py-5">
                 <div className="row align-items-center g-lg-5 py-5">
                 <div className="col-lg-7 text-center text-lg-start">
                     <h1 className="display-4 fw-bold lh-1 mb-3">Se pré-inscrire</h1>
@@ -159,9 +177,35 @@ const About = () => {
                         <input type="password" value={register.password} onChange={onChange} className="form-control" id="floatingPassword" name="password" placeholder="Mot de passe" />
                         <label for="floatingPassword">Mot de passe</label>
                     </div>
-                    <input type="submit" className="w-100 btn btn-lg btn-primary" value="Se pré-inscrire" />
-                    <div class="valid-feedback">Vous êtes enregistré·e</div>
+                    {!message.isSubmit ? (
+                        <input type="submit" className="w-100 btn btn-lg btn-primary" value="Se pré-inscrire" />
+                        ):
+                        (
+                        <>
+                            <p className="w-100 btn btn-lg btn-success"><i className={`fa fa-check mx-2`}></i>{message.registrationSuccess}</p>
+                        </>
+                    )}
+                    <p className='text-center'><small><i className={`fa fa-lock mx-2`}></i>Aucune de vos informations ne seront partagées</small></p>
                     </form>
+                </div>
+                </div>
+            </div>
+
+            <div className="divider wow animate__animated animate__fadeInUp"></div>
+
+            <div className="wow animate__animated animate__fadeInUp bg-dark text-secondary px-4 py-5 text-center">
+                <div className="py-5">
+                <h1 className="display-5 fw-bold text-white">Avant de partir...</h1>
+                <div className="col-lg-6 mx-auto">
+                    <p className="fs-5 mb-4">Si vous souhaitez soutenir ce projet, n'hésitez pas à partager cette page sur les réseaux et autour de vous.</p>
+                    <ul className="list">
+                        <li className="list-group-item">Vous cherchez à me contacter : </li>
+                        <li className="list-group-item"><i className={`fa fa-envelope mx-2`}></i>matgervais96@gmail.com</li>
+                        <li className="list-group-item"><i className="fa-brands fa-linkedin"></i> Mathieu Gervais </li>
+                    </ul>
+                    <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <p><small>© 2022 yaprescription.com. All rights reserved</small></p>
+                    </div>
                 </div>
                 </div>
             </div>
