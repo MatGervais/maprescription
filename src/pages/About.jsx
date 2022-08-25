@@ -42,11 +42,12 @@ const About = () => {
 
     async function handleSubmit(e){
         e.preventDefault()
-        // await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, register).then((res)=>{
-        //     // console.log(res.data.message);
-        //     setMessage({...message, registrationSuccess:res.data.message})
-        // })
-        setMessage({...message, isSubmit:true, registrationSuccess:"Pré-inscription validée"})
+        try {await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, register).then((res)=>{
+            setMessage({...message, isSubmit:true, success:{result:res.data.success}, registrationSuccess:res.data.message})
+        })
+    } catch(err) {
+        setMessage({...message, isSubmit:true, success:{result:false}, registrationSuccess:"Mail déjà enregistré"})
+    }
     }
     return (
         <>
@@ -181,9 +182,17 @@ const About = () => {
                         <input type="submit" className="w-100 btn btn-lg btn-primary" value="Se pré-inscrire" />
                         ):
                         (
-                        <>
-                            <p className="w-100 btn btn-lg btn-success"><i className={`fa fa-check mx-2`}></i>{message.registrationSuccess}</p>
-                        </>
+                            !message.success?.result ? (
+                            <>
+                                <p className="w-100 btn btn-lg btn-danger"><i class="fa-solid fa-xmark mx-2"></i>{message.registrationSuccess}</p>
+                            </>
+                            ) :
+                            (
+                                <>
+                                    <p className="w-100 btn btn-lg btn-success"><i className={`fa fa-check mx-2`}></i>{message.registrationSuccess}</p>
+                                </>
+
+                            )
                     )}
                     <p className='text-center'><small><i className={`fa fa-lock mx-2`}></i>Aucune de vos informations ne seront partagées</small></p>
                     </form>
