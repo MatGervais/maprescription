@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import axios from "axios"
+import ConnectionButton from '../../../components/ConnectionButton';
 
 const Register = () => {
 
@@ -8,27 +9,27 @@ const Register = () => {
         email:"",
         password:""
     })
-    const [message, setMessage] =useState({
+    const [form, setForm] =useState({
         isSubmit : false,
         error:"",
         errorPassword:"",
-        registrationMessage:""
+        message:""
     })
 
     function onChange({currentTarget}){
         const {name,value} = currentTarget
         setRegister({...register, [name]:value})
-        setMessage({...message, isSubmit:false, success:{result:false}, registrationMessage:""})
+        setForm({...form, isSubmit:false, success:{result:false}, registrationMessage:""})
     }
 
     async function handleSubmit(e){
         e.preventDefault()
         try {await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, register).then((res)=>{
-            setMessage({...message, isSubmit:true, success:{result:res.data.success}, registrationMessage:res.data.message})
+            setForm({...form, isSubmit:true, success:{result:res.data.success}, message:res.data.message})
         })
         } catch(err) {
-            // console.log(err.response.data.message);
-            setMessage({...message, isSubmit:true, success:{result:false}, registrationMessage:err.response.data.message})
+            console.log(err);
+            setForm({...form, isSubmit:true, success:{result:err.response.data.success}, message:err.response.data.message})
         }
     }
 
@@ -58,32 +59,9 @@ const Register = () => {
                         <input type="password" value={register.password} onChange={onChange} className="form-control" id="floatingPassword" name="password" placeholder="Mot de passe" />
                         <label for="floatingPassword">Mot de passe *</label>
                     </div>
-                    {!message.isSubmit ? (
+                    
+                    <ConnectionButton label="Se pré-inscire" form={form}/>
 
-                        <input type="submit" className="w-100 btn btn-lg btn-primary" value="Se pré-inscrire" />
-
-                        ):
-                        (
-                            !message.success?.result ? (
-                            <>
-                                <p className="w-100 btn btn-lg btn-primary disabled"><i class="fa-solid fa-xmark mx-2"></i>Se pré-inscrire</p>
-                                <div className="d-flex align-items-center alert alert-danger row pb-0 mt-3">
-                                    <div className="col-md-2">
-                                        <i  className="fa-solid fa-triangle-exclamation display-6 pb-4"></i>
-                                        </div>
-                                        <div className="col-md-10">
-                                        <p>{message.registrationMessage}</p>
-                                    </div>
-                                </div>
-                            </>
-                            ) :
-                            (
-                                <>
-                                    <p className="w-100 btn btn-lg btn-success"><i className={`fa fa-check mx-2`}></i>{message.registrationMessage}</p>
-                                </>
-
-                            )
-                    )}
                     <p className='text-center mt-3'><small><i class="fa-solid fa-triangle-exclamation mx-2"></i>Nombre de pré-inscription limité</small></p>
                     <p className='text-center mt-3'><small><i className={`fa fa-lock mx-2`}></i>Aucune de vos informations ne seront partagées</small></p>
                     </form>
