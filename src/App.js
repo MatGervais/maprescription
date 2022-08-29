@@ -4,6 +4,7 @@ import axios from 'axios';
 import MedicationContext from './contexts/MedicationContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import About from './pages/vitrine/About';
+import Login from './pages/Login';
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<About />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     </MedicationContext.Provider>
