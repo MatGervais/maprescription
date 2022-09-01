@@ -2,12 +2,15 @@ import { useState, useEffect } from "react";
 import ConnectionButton from "../components/ConnectionButton";
 import {useNavigate} from "react-router-dom"
 import axios from 'axios';
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [login, setLogin] = useState({
     email:"",
     password:""
   })
+
+  const [cookies, setCookies] = useCookies(["accessToken"])
 
   const [form, setForm] =useState({
     isSubmit : false,
@@ -40,6 +43,7 @@ const Login = () => {
         setForm({ ...form, isSubmit: true, success: { result: res.data.success }, message: res.data.message, token: res.data.token })
         form.token = res.data.token
         window.localStorage.setItem("YPToken", form.token);
+        setCookies("accessToken", form.token)
       })
     } catch (err) {
       console.log(err);
@@ -49,18 +53,18 @@ const Login = () => {
   };
 
   return (
-    <main class="mt-5 bg-light d-flex align-content-center flex-wrap rounded justify-content-center container form-signin w-100 m-auto">
+    <main className="mt-5 bg-light d-flex align-content-center flex-wrap rounded justify-content-center container form-signin w-100 m-auto">
   <form onSubmit={handleSubmit} className="text-center col-md-4 ">
-    <img class="mb-4" src={"images/logos/dark_logo_transparent_background.png"} alt="" width="340" height="154" />
-    <h1 class="h3 mb-3 fw-normal">Connexion</h1>
+    <img className="mb-4" src={"images/logos/dark_logo_transparent_background.png"} alt="" width="340" height="154" />
+    <h1 className="h3 mb-3 fw-normal">Connexion</h1>
 
-    <div class="form-floating mt-4">
-      <input type="email" onChange={onChange} class="form-control" id="floatingInput" name="email" placeholder="nom@example.com" />
-      <label for="floatingInput">Adresse mail</label>
+    <div className="form-floating mt-4">
+      <input type="email" onChange={onChange} className="form-control" id="floatingInput" name="email" placeholder="nom@example.com" />
+      <label htmlFor="floatingInput">Adresse mail</label>
     </div>
-    <div class="form-floating mt-4">
-      <input type="password" onChange={onChange} class="form-control" id="floatingPassword" name="password" placeholder="Mot de passe" />
-      <label for="floatingPassword">Mot de passe</label>
+    <div className="form-floating mt-4">
+      <input type="password" onChange={onChange} className="form-control" id="floatingPassword" name="password" placeholder="Mot de passe" />
+      <label htmlFor="floatingPassword">Mot de passe</label>
     </div>
 
     <ConnectionButton label="Se connecter" form={form} />

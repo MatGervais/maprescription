@@ -53,7 +53,7 @@ const Prescription = () => {
     }
     
 }
-    if (!authenticated) {
+    if (cookies["accessToken"] === "undefined") {
         return <Navigate to="/login" />;
     }
     else {

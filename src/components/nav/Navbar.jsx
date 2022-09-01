@@ -1,21 +1,24 @@
 import axios from 'axios';
 import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {useCookies} from "react-cookie"
+import About from '../../pages/vitrine/About';
 
 const Navbar = () => {
 
-    const [authenticated, setauthenticated] = useState(localStorage.getItem("YPToken") || false);
+    const [cookies, removeCookies] = useCookies(['accessToken'])
     let navigate = useNavigate()
     function disconnect(){
         axios.get('http://localhost:5000/auth/logout').then((res)=>{
             localStorage.setItem("YPToken","")
+            removeCookies("accessToken")
         })
-        navigate('/')
+        navigate(<About />)
     }
 
     return (
         <>
-          {authenticated ? (
+          {cookies["accessToken"] !== "undefined" ? (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
             <div className="container-fluid">
             <Link className="navbar-brand" to={"/"}>
@@ -45,8 +48,8 @@ const Navbar = () => {
                     </Link>
                 </li>
                 </ul>
-                <form class="d-flex" data-dashlane-rid="5d565b6790b9a581" data-form-type="">
-                    <button class="btn btn-secondary my-2 my-sm-0" onClick={disconnect}><i class="fa-solid fa-right-from-bracket"></i></button>
+                <form className="d-flex" data-dashlane-rid="5d565b6790b9a581" data-form-type="">
+                    <button className="btn btn-secondary my-2 my-sm-0" onClick={disconnect}><i className="fa-solid fa-right-from-bracket"></i></button>
                 </form>
             </div>
             </div>
