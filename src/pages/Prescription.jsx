@@ -4,25 +4,34 @@ import TableRow from '../components/TableRow';
 import axios from 'axios';
 import AddItem from '../components/addItem';
 import { Navigate } from "react-router-dom";
+import { useCookies } from 'react-cookie';
+import jwtDecode from 'jwt-decode';
 
 const Prescription = () => {
 
-    const [authenticated, setauthenticated] = useState(null);
-    useEffect(() => {
-      const loggedInUser = localStorage.getItem("accessToken");
-      if (loggedInUser) {
-        setauthenticated(loggedInUser);
-        console.log(authenticated);
-      }
-    }, []);
+  const [authenticated, setauthenticated] = useState(localStorage.getItem("YPToken") || false);
 
-    
+  const [cookies, setCookies] = useCookies(["accessToken"])
+
+  console.log(cookies);
+  const user = jwtDecode(cookies.accessToken)
+  console.log(user.id);
+
   const [view,setView] = useState({type:"gallery", icon:"table-list", label:"Tableau"})
   const [medocs,setMedocs] =useState([])
   const [requestMsg,setRequestMsg] = useState({
     delete:"",
     modify:""
   })
+
+  useEffect(() => {
+        console.log("UseEffect");
+        async function getMeds() {
+          const datas = await axios.get(`${process.env.REACT_APP_API_URL}/api/medication/user/${user.id}`, {withCredentials:true})
+          setMedocs(datas.data.medications)
+        }
+        getMeds()
+      }, []);
 
   function changeView(){
     if(view.type === "gallery"){
@@ -35,10 +44,9 @@ const Prescription = () => {
   async function removeItem(event) {
     const deleteMedication = medocs.filter(x => x.id != event.target.id);
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/medication/${event.target.id}`)
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/medication/${event.target.id}`, {withCredentials:true})
         .then((res)=>{
           setMedocs(deleteMedication)
-          // setRequestMsg({...requestMsg, delete:res.data.msg})
         })
     } catch (error) {
         console.log(error);
@@ -50,7 +58,7 @@ const Prescription = () => {
     }
     else {
         return (
-        <div>
+        <div className="container text-center mt-3">
             <button onClick={changeView} className="btn btn-primary">
             <i className={`fa fa-${view?.icon} mx-1`}></i> {view.label}
             </button>
@@ -80,7 +88,7 @@ const Prescription = () => {
                 <tr>
                     <th>Nom</th>
                     <th>Inventaire fait le</th>
-                    <th>À renouveler dans</th>
+                    <th>En rupture dans</th>
                 </tr>
                 </thead>
                 <tbody>

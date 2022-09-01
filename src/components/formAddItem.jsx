@@ -2,14 +2,26 @@ import React, {useState} from 'react';
 import axios from "axios"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import jwtDecode from 'jwt-decode';
+import { useCookies } from 'react-cookie';
+import moment from 'moment';
 
 const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medication,id,toggleHide,setEdit}) => {
+
+    const token = localStorage.getItem("YPToken")
+    const user =  jwtDecode(token)
+    console.log(method,token)
+
+    const [cookies, setCookies] = useCookies(["accessToken"])
+
+    console.log(cookies);
 
     const [form,setForm] = useState({
         name:name||"",
         stock:stock||0,
         renewed: renewed || new Date(),
-        dosage :prescPerDay||0
+        dosage :prescPerDay||0,
+        userId:user.id
     })
 
 
@@ -29,6 +41,7 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
     
     async function submitForm(event){
         event.preventDefault();
+        form.renewed = moment(form.renewed).format("YYYY-MM-DD")
         if(form.name.length<1){
             setFormError({...formError, name:"Veuillez renseigner un nom de médicament"})
         }
@@ -36,7 +49,7 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
             setFormError({...formError, name:""})
         }
         if(method==="put"){
-            await axios.put(`${process.env.REACT_APP_API_URL}/medication/${id}`, form)
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/medication/${id}`, form, {withCredentials:true})
             .then(res=>{
                 // console.log(res.data.modifyMed)
                 const newState = medication.map(obj => {
@@ -51,11 +64,16 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
                 await toggleHide()
         }
         if(method==="post"){
-            await axios.post(`${process.env.REACT_APP_API_URL}/medication`, form)
+            console.log(form);
+            try{
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/medication`, form, {withCredentials:true})
             .then(res=>{
                 console.log(res)
                 setMedication([...medication,res.data.newMedication])
             })
+        } catch(err){
+            console.log("Test",err);
+        }
         }
         setEdit("plus")
     }
@@ -84,8 +102,8 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
                     
 
                     <div className='row mt-4'>
-                    <button className='btn btn-danger col-md-4 col-4 mx-auto' onClick={toggleHide}>Annuler</button>
-                    <input className="btn btn-success col-md-4 col-4 mx-auto" type="submit" value="Enregistrer" />
+                        <button className='btn btn-danger col-md-5 col-6 mx-auto' onClick={toggleHide}>Annuler</button>
+                        <button className="btn btn-success col-md-5 col-6 mx-auto" type="submit">Enregistrer</button>
                     </div>
                     </form>
     );

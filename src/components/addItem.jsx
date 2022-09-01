@@ -1,15 +1,20 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import FormAddItem from './formAddItem';
+import jwtDecode from 'jwt-decode';
 
 const AddItem = ({medication, setMedication}) => {
+
+    const token = localStorage.getItem("YPToken")
+    const user =  jwtDecode(token)
 
     const [ItemToggle,setItemToggle] = useState("plus") //Affichage d'un bouton +
     // const [form,setForm] = useState({
     //     name:"",
     //     stock:0,
     //     renewed: "",
-    //     dosage :0
+    //     dosage :0,
+    //     userId:user.id
     // })
 
     // const [formError,setFormError] = useState({
@@ -45,7 +50,7 @@ const AddItem = ({medication, setMedication}) => {
     //         setFormError({...formError, name:""})
     //     }
     //     console.log(JSON.stringify(form))
-    //     await axios.post("http://localhost:5000/api/medication", form)
+    //     await axios.post(`${process.env.REACT_APP_API_URL}/api/medication`, form, { headers: {"Authorization" : `Bearer ${token}`} })
     //     .then(res=>{
     //         console.log(res)
     //         setMedication([...medication,res.data.newMedication])
