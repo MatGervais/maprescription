@@ -9,7 +9,7 @@ import jwtDecode from 'jwt-decode';
 import Navbar from './components/nav/Navbar';
 import Prescription from './pages/Prescription';
 import Cookies from "universal-cookie"
-import {useCookies} from 'react-cookie'
+import {useCookies, CookiesProvider} from 'react-cookie'
 
 
 function App() {
@@ -27,46 +27,15 @@ function App() {
     updateMedication : setMedocs
   }
   const token = localStorage.getItem("YPToken") || null
-
-  setCookies("accessToken",token)
+  // if(localStorage.getItem("YPToken").length != undefined){
+  //   setCookies("accessToken",token)
+  // }
 
   console.log(cookies);
 
-  // const user =  token ? jwtDecode(token) :{}
-
-//   function changeView(){
-//     if(view.type === "gallery"){
-//       setView({type:"table", icon:"grip", label:"Galerie"})
-//     }
-//     else setView({type:"gallery", icon:"table-list", label:"Tableau"})
-//   }
-
-//   useEffect(() => {
-//     console.log("UseEffect");
-//     async function getMeds() {
-//       const datas = await axios.get(`${process.env.REACT_APP_API_URL}/medication`)
-//       setMedocs(datas.data)
-//     }
-//     getMeds()
-//   }, []);
-
-
-//   async function removeItem(event) {
-//     const deleteMedication = medocs.filter(x => x.id != event.target.id);
-//     try {
-//       await axios.delete(`${process.env.REACT_APP_API_URL}/medication/${event.target.id}`)
-//         .then((res)=>{
-//           setMedocs(deleteMedication)
-//         })
-//     } catch (error) {
-//         console.log(error);
-//     }
-    
-// }
-
 
   return (
-    <MedicationContext.Provider value={contextValue}>
+    <CookiesProvider>
       <Router>
         <Navbar />
         <Routes>
@@ -75,7 +44,7 @@ function App() {
           <Route path="/mon-stock" element={<Prescription />} />
         </Routes>
       </Router>
-    </MedicationContext.Provider>
+    </CookiesProvider>
   );
 }
 
