@@ -5,6 +5,12 @@ import MedicationContext from './contexts/MedicationContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import About from './pages/vitrine/About';
 import Login from './pages/Login';
+import jwtDecode from 'jwt-decode';
+import Navbar from './components/nav/Navbar';
+import Prescription from './pages/Prescription';
+import Cookies from "universal-cookie"
+import {useCookies} from 'react-cookie'
+
 
 function App() {
 
@@ -14,49 +20,59 @@ function App() {
     delete:"",
     modify:""
   })
+  const [cookies, setCookies] = useCookies(["accessToken"])
 
   const contextValue = {
     medication : medocs,
     updateMedication : setMedocs
   }
+  const token = localStorage.getItem("YPToken") || null
 
-  function changeView(){
-    if(view.type === "gallery"){
-      setView({type:"table", icon:"grip", label:"Galerie"})
-    }
-    else setView({type:"gallery", icon:"table-list", label:"Tableau"})
-  }
+  setCookies("accessToken",token)
 
-  useEffect(() => {
-    console.log("UseEffect");
-    async function getMeds() {
-      const datas = await axios.get(`${process.env.REACT_APP_API_URL}/medication`)
-      setMedocs(datas.data)
-    }
-    getMeds()
-  }, []);
+  console.log(cookies);
+
+  // const user =  token ? jwtDecode(token) :{}
+
+//   function changeView(){
+//     if(view.type === "gallery"){
+//       setView({type:"table", icon:"grip", label:"Galerie"})
+//     }
+//     else setView({type:"gallery", icon:"table-list", label:"Tableau"})
+//   }
+
+//   useEffect(() => {
+//     console.log("UseEffect");
+//     async function getMeds() {
+//       const datas = await axios.get(`${process.env.REACT_APP_API_URL}/medication`)
+//       setMedocs(datas.data)
+//     }
+//     getMeds()
+//   }, []);
 
 
-  async function removeItem(event) {
-    const deleteMedication = medocs.filter(x => x.id != event.target.id);
-    try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/medication/${event.target.id}`)
-        .then((res)=>{
-          setMedocs(deleteMedication)
-        })
-    } catch (error) {
-        console.log(error);
-    }
+//   async function removeItem(event) {
+//     const deleteMedication = medocs.filter(x => x.id != event.target.id);
+//     try {
+//       await axios.delete(`${process.env.REACT_APP_API_URL}/medication/${event.target.id}`)
+//         .then((res)=>{
+//           setMedocs(deleteMedication)
+//         })
+//     } catch (error) {
+//         console.log(error);
+//     }
     
-}
+// }
 
 
   return (
     <MedicationContext.Provider value={contextValue}>
       <Router>
+        <Navbar />
         <Routes>
           <Route exact path="/" element={<About />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/mon-stock" element={<Prescription />} />
         </Routes>
       </Router>
     </MedicationContext.Provider>

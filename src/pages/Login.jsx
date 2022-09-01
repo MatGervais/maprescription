@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ConnectionButton from "../components/ConnectionButton";
+import {useNavigate} from "react-router-dom"
 import axios from 'axios';
 
 const Login = () => {
@@ -12,7 +13,8 @@ const Login = () => {
     isSubmit : false,
     error:"",
     errorPassword:"",
-    message:""
+    message:"",
+    token:""
   })
 
   function onChange({currentTarget}){
@@ -21,19 +23,29 @@ const Login = () => {
     setForm({...form, isSubmit:false, success:{result:false}, registrationMessage:""})
   }
 
-  const [authenticated, setauthenticated] = useState(localStorage.getItem(localStorage.getItem("authenticated")|| false));
-  // const users = [{ username: "Jane", password: "testpassword" }];
+  const [authenticated, setauthenticated] = useState(localStorage.getItem("YPToken") || "" );
+
+  let navigate = useNavigate()
+  useEffect(() => {
+    if(authenticated.length > 1){
+      navigate('/')
+    }
+  }, [authenticated]);
+
+  
   async function handleSubmit(e) {
     e.preventDefault()
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, login).then((res) => {
-        setForm({ ...form, isSubmit: true, success: { result: res.data.success }, message: res.data.message })
+        setForm({ ...form, isSubmit: true, success: { result: res.data.success }, message: res.data.message, token: res.data.token })
+        form.token = res.data.token
+        window.localStorage.setItem("YPToken", form.token);
       })
     } catch (err) {
       console.log(err);
       setForm({ ...form, isSubmit: true, success: { result: err.response.data.success }, message: err.response.data.message })
     }
-
+    navigate('/')
   };
 
   return (

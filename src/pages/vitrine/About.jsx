@@ -8,6 +8,8 @@ import Footer from './sections/Footer';
 
 const About = () => {
 
+  const [authenticated, setauthenticated] = useState(localStorage.getItem("YPToken") || false);
+
     useEffect(() => {
         new WOW.WOW({
           live: true,
@@ -25,10 +27,13 @@ const About = () => {
             <ByWho />
 
             <div className="divider wow animate__animated animate__fadeInUp"></div>
+            {!authenticated ? (
+              <>
+              <Register />
+              <div className="divider wow animate__animated animate__fadeInUp"></div>
+              </>
+            ):""}
 
-            <Register />
-
-            <div className="divider wow animate__animated animate__fadeInUp"></div>
 
             <Footer />
         </>
