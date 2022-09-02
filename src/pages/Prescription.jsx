@@ -3,35 +3,35 @@ import Item from '../components/Item';
 import TableRow from '../components/TableRow';
 import axios from 'axios';
 import AddItem from '../components/addItem';
-import { Navigate } from "react-router-dom";
-import { useCookies } from 'react-cookie';
+import { useNavigate } from "react-router-dom";
 import jwtDecode from 'jwt-decode';
 
 const Prescription = () => {
 
-  const [authenticated, setauthenticated] = useState(localStorage.getItem("YPToken") || false);
-
-  const [cookies, setCookies] = useCookies(["accessToken"])
-
-  console.log(cookies);
-  const user = jwtDecode(cookies.accessToken)
-  console.log(user.id);
-
+  let navigate = useNavigate()
+  if(!window.localStorage.getItem("YPToken")){
+    navigate('/')
+  }
+  const token = window.localStorage.getItem("YPToken")
+  const user = jwtDecode(token)
+  
   const [view,setView] = useState({type:"gallery", icon:"table-list", label:"Tableau"})
   const [medocs,setMedocs] =useState([])
   const [requestMsg,setRequestMsg] = useState({
     delete:"",
     modify:""
   })
-
+  
   useEffect(() => {
-        console.log("UseEffect");
+
         async function getMeds() {
-          const datas = await axios.get(`${process.env.REACT_APP_API_URL}/api/medication/user/${user.id}`, {withCredentials:true})
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          const datas = await axios.get(`${process.env.REACT_APP_API_URL}/api/medication/user/${user?.id}`)
+          console.log(datas.data.medications);
           setMedocs(datas.data.medications)
         }
         getMeds()
-      }, []);
+      }, [token]);
 
   function changeView(){
     if(view.type === "gallery"){
@@ -44,19 +44,18 @@ const Prescription = () => {
   async function removeItem(event) {
     const deleteMedication = medocs.filter(x => x.id != event.target.id);
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/medication/${event.target.id}`, {withCredentials:true})
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/medication/${event.target.id}`)
         .then((res)=>{
+          console.log(res);
           setMedocs(deleteMedication)
         })
     } catch (error) {
         console.log(error);
     }
     
-}
-    if (cookies["accessToken"] === "undefined") {
-        return <Navigate to="/login" />;
-    }
-    else {
+  }
+
         return (
         <div className="container text-center mt-3">
             <button onClick={changeView} className="btn btn-primary">
@@ -101,7 +100,6 @@ const Prescription = () => {
         </div>
         );
     }
-}
 
 
 export default Prescription;

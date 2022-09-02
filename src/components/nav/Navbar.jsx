@@ -1,24 +1,30 @@
 import axios from 'axios';
-import React, {useState} from 'react';
+import React, { useContext, useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {useCookies} from "react-cookie"
-import About from '../../pages/vitrine/About';
+import authContext from '../../contexts/authContext';
 
 const Navbar = () => {
 
-    const [cookies, removeCookies] = useCookies(['accessToken'])
+  const authentication = useContext(authContext);
+
+  useEffect(()=>{
+    if(window.localStorage.getItem("YPToken")){
+        authentication.updateAuth(true)
+    }
+  },[])
+
     let navigate = useNavigate()
     function disconnect(){
         axios.get('http://localhost:5000/auth/logout').then((res)=>{
-            localStorage.setItem("YPToken","")
-            removeCookies("accessToken")
+            window.localStorage.removeItem("YPToken")
         })
-        navigate(<About />)
+        navigate("/")
     }
 
     return (
-        <>
-          {cookies["accessToken"] !== "undefined" ? (
+        <>{
+            window.localStorage.getItem("YPToken") ? (
+
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
             <div className="container-fluid">
             <Link className="navbar-brand" to={"/"}>
@@ -54,7 +60,8 @@ const Navbar = () => {
             </div>
             </div>
         </nav>
-          ):""}
+            ):(<></>)
+        }
       </>
     );
 }

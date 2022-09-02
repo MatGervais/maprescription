@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect} from 'react';
 import axios from 'axios';
 import MedicationContext from './contexts/MedicationContext';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import About from './pages/vitrine/About';
 import Login from './pages/Login';
 import jwtDecode from 'jwt-decode';
@@ -10,6 +10,7 @@ import Navbar from './components/nav/Navbar';
 import Prescription from './pages/Prescription';
 import Cookies from "universal-cookie"
 import {useCookies, CookiesProvider} from 'react-cookie'
+import AuthContext from './contexts/authContext';
 
 
 function App() {
@@ -20,22 +21,17 @@ function App() {
     delete:"",
     modify:""
   })
-  const [cookies, setCookies] = useCookies(["accessToken"])
 
-  const contextValue = {
-    medication : medocs,
-    updateMedication : setMedocs
+  const [authenticated, setAuth] = useState(false)
+  const authContext = {
+    authenticated,
+    updateAuth: setAuth
   }
-  const token = localStorage.getItem("YPToken") || null
-  // if(localStorage.getItem("YPToken").length != undefined){
-  //   setCookies("accessToken",token)
-  // }
 
-  console.log(cookies);
-
+  const token = window.localStorage.getItem("YPToken") || ""
 
   return (
-    <CookiesProvider>
+    <AuthContext.Provider value={authContext}>
       <Router>
         <Navbar />
         <Routes>
@@ -44,7 +40,7 @@ function App() {
           <Route path="/mon-stock" element={<Prescription />} />
         </Routes>
       </Router>
-    </CookiesProvider>
+    </AuthContext.Provider>
   );
 }
 

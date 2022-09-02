@@ -2,10 +2,13 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import FormAddItem from './formAddItem';
 import jwtDecode from 'jwt-decode';
+import { useCookies } from 'react-cookie';
 
 const AddItem = ({medication, setMedication}) => {
 
     const token = localStorage.getItem("YPToken")
+
+    // const [cookies, setCookies] = useCookies(["accessToken"])
     const user =  jwtDecode(token)
 
     const [ItemToggle,setItemToggle] = useState("plus") //Affichage d'un bouton +

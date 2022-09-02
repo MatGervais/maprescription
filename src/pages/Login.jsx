@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ConnectionButton from "../components/ConnectionButton";
 import {useNavigate} from "react-router-dom"
 import axios from 'axios';
-import { useCookies } from "react-cookie";
+import authContext from "../contexts/authContext";
 
 const Login = () => {
   const [login, setLogin] = useState({
@@ -10,7 +10,7 @@ const Login = () => {
     password:""
   })
 
-  const [cookies, setCookies] = useCookies(["accessToken"])
+  const authentication = useContext(authContext)
 
   const [form, setForm] =useState({
     isSubmit : false,
@@ -30,7 +30,7 @@ const Login = () => {
 
   let navigate = useNavigate()
   useEffect(() => {
-    if(authenticated.length > 1){
+    if(authentication.authenticed){
       navigate('/')
     }
   }, [authenticated]);
@@ -40,13 +40,11 @@ const Login = () => {
     e.preventDefault()
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, login).then((res) => {
-        setForm({ ...form, isSubmit: true, success: { result: res.data.success }, message: res.data.message, token: res.data.token })
-        form.token = res.data.token
-        window.localStorage.setItem("YPToken", form.token);
-        setCookies("accessToken", form.token)
+        setForm({ ...form, isSubmit: true, success: { result: res.data.success }, message: res.data.message, token: res.data.accessToken })
+        authentication.updateAuth(true)
+        window.localStorage.setItem("YPToken", res.data.accessToken);
       })
     } catch (err) {
-      console.log(err);
       setForm({ ...form, isSubmit: true, success: { result: err.response.data.success }, message: err.response.data.message })
     }
     navigate('/')
