@@ -5,6 +5,7 @@ import Intro from './sections/Intro';
 import ByWho from './sections/ByWho';
 import Register from './sections/Register';
 import Footer from './sections/Footer';
+import { Navigate, useNavigate } from "react-router-dom";
 
 const About = () => {
 

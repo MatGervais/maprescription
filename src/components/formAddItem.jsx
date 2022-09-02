@@ -3,18 +3,12 @@ import axios from "axios"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jwtDecode from 'jwt-decode';
-import { useCookies } from 'react-cookie';
 import moment from 'moment';
 
 const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medication,id,toggleHide,setEdit}) => {
 
-    const token = localStorage.getItem("YPToken")
+    const token = window.localStorage.getItem("YPToken")
     const user =  jwtDecode(token)
-    console.log(method,token)
-
-    const [cookies, setCookies] = useCookies(["accessToken"])
-
-    console.log(cookies);
 
     const [form,setForm] = useState({
         name:name||"",
@@ -35,7 +29,6 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
 
     function onChange({currentTarget}) {
         const {name,value} = currentTarget
-        console.log(name,value);
         setForm({...form, [name]:value})
     }
     
@@ -49,9 +42,9 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
             setFormError({...formError, name:""})
         }
         if(method==="put"){
-            await axios.put(`${process.env.REACT_APP_API_URL}/api/medication/${id}`, form, {withCredentials:true})
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/medication/${id}`, form)
             .then(res=>{
-                // console.log(res.data.modifyMed)
                 const newState = medication.map(obj => {
                     if (obj.id === id) {
                       return res.data.modifyMed;
@@ -66,20 +59,19 @@ const FormAddItem = ({method,name,stock,renewed,prescPerDay,setMedication,medica
         if(method==="post"){
             console.log(form);
             try{
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/medication`, form, {withCredentials:true})
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/medication`, form)
             .then(res=>{
-                console.log(res)
                 setMedication([...medication,res.data.newMedication])
             })
         } catch(err){
-            console.log("Test",err);
+            console.log(err);
         }
         }
         setEdit("plus")
     }
 
     function changeDate(date){
-        console.log(date);
         setForm({...form,renewed:date})
     }
 
