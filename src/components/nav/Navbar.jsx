@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useEffect} from 'react';
+import React, { useContext, useEffect, useCallback} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import authContext from '../../contexts/authContext';
 
@@ -14,12 +14,11 @@ const Navbar = () => {
   },[])
 
     let navigate = useNavigate()
-    async function disconnect(){
-        await axios.get('http://localhost:5000/auth/logout').then((res)=>{
-            window.localStorage.removeItem("YPToken")
-        })
-        navigate("/")
-    }
+
+    const handleOnClick = useCallback(() =>{
+        navigate('/login', {replace: true})
+        localStorage.removeItem("YPToken")
+    }, [navigate]);
 
     return (
         <>{
@@ -44,7 +43,7 @@ const Navbar = () => {
                 </li>
                 </ul>
                 <form className="d-flex" data-dashlane-rid="5d565b6790b9a581" data-form-type="">
-                    <button className="btn btn-secondary my-2 my-sm-0" onClick={disconnect}><i className="fa-solid fa-right-from-bracket"></i></button>
+                    <button className="btn btn-secondary my-2 my-sm-0" onClick={handleOnClick}><i className="fa-solid fa-right-from-bracket"></i></button>
                 </form>
             </div>
             </div>
