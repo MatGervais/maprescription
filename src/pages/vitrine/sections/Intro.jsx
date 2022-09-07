@@ -14,9 +14,9 @@ const Intro = () => {
     return (
         <div className="px-4 pt-5 text-center">
                 <div className="container px-5">
-                    <img src={"images/author.png"} alt="" />
+                    <img className="mb-4" src={"images/logos/dark_logo_transparent_background.png"} alt="" width="340" height="154" />
                 </div>
-                <h1 className="display-4 fw-bold">Ya prescription, c'est quoi ?</h1>
+                <h1 className="display-4 fw-bold">YaPrescription, c'est quoi ?</h1>
                 <div className="col-lg-6 mx-auto">
                     <p className="lead mb-4"><strong>YaPrescription</strong> est une application web vous permettant de gérer vos ordonnances et vos stocks de médicaments. Elle est avant tout pensée, pour être utilisée par des personnes qui ont de nombreuses ordonnances ou alors un nombre conséquent de médicaments à gérer de leur quotidien.</p>
                     <h2 className="display-5">Comment ça fonctionne ?</h2>
