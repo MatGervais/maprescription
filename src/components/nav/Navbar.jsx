@@ -43,7 +43,7 @@ const Navbar = () => {
                 </li>
                 </ul>
                 <form className="d-flex" data-dashlane-rid="5d565b6790b9a581" data-form-type="">
-                    <Link to={"/profil"} className="btn btn-secondary my-2 mx-2 my-sm-0"><i class="fa-solid fa-user"></i></Link>
+                    <Link to={"/profil"} className="btn btn-secondary my-2 mx-2 my-sm-0"><i className="fa-solid fa-user"></i></Link>
                     <button className="btn btn-secondary my-2 my-sm-0 mx-2" onClick={handleOnClick}><i className="fa-solid fa-right-from-bracket"></i></button>
                 </form>
             </div>
