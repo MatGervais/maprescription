@@ -30,7 +30,6 @@ const Item = ({name,stock,renewed,prescPerDay,id,setMedication,medication, remov
       }
       else {setEdit(true)}
     }
-
     
     return (
       <div className={`card ${daysRemaining < 10 ? "bg-danger text-white":daysRemaining < 18 ? "border-warning" : ""} col-md-3 m-3`}>
@@ -42,9 +41,9 @@ const Item = ({name,stock,renewed,prescPerDay,id,setMedication,medication, remov
           {!edit ? (
             <>
             <h4 className="card-title" id={`${id}-${name}`}>{name}</h4>
-            <h6 className={`card-subtitle mb-2 ${daysRemaining < 10 ? "text-white":daysRemaining < 18 ? "text-warning" : "text-muted"}`} id={`${id}-${stock}`}>RESTANTS : <strong>{stock}</strong></h6>
+            <h6 className={`card-subtitle mb-2 ${daysRemaining < 10 ? "text-white":daysRemaining < 18 ? "text-warning" : "text-muted"}`} id={`${id}-${stock}`}>RESTANTS : <strong>{daysRemaining * prescPerDay}</strong></h6>
               <p className="card-text" id={`${id}-${prescPerDay}`}>Posologie (par jour) : <strong>{prescPerDay}</strong></p>
-            <p className="card-text">Inventaire fait le : <strong onClick={()=>console.log("Input")}>{new Date(renewed).toLocaleDateString()}</strong></p>
+            <p className="card-text">Inventaire fait le : <strong onClick={()=>console.log("Input")}>{new Date(renewed).toLocaleDateString()}</strong> avec <strong>{stock}</strong> restants</p>
             <p className={`card-text`}><strong>Rupture de stock le : {new Date(toRenew).toLocaleDateString()} <span className={`${daysRemaining < 10 ? "text-white":daysRemaining < 18 ? "text-warning" : "text-muted"}`}>(dans {daysRemaining?daysRemaining:""} jours) </span></strong></p>
             </>
           ): 

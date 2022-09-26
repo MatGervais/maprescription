@@ -18,11 +18,14 @@ const TableRow = ({item}) => {
         setDaysRemaining(diffDays)
     },[toRenew])
 
+    console.log(item);
+
     return (
         <tr className={`${daysRemaining < 10 ? "table-danger":daysRemaining < 18 ? "table-warning" : ""}`}>
             <th scope="row">{item.name}</th>
             <td>{new Date(item.renewed).toLocaleDateString()}</td>
             <td>{daysRemaining?daysRemaining:""} jours</td>
+            <td>{daysRemaining * item.dosage}</td>
         </tr>
     );
 }
