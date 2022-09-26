@@ -88,6 +88,7 @@ const Prescription = () => {
                     <th>Nom</th>
                     <th>Inventaire fait le</th>
                     <th>En rupture dans</th>
+                    <th>Unités restantes</th>
                 </tr>
                 </thead>
                 <tbody>

@@ -6,6 +6,7 @@ import ByWho from './sections/ByWho';
 import Register from './sections/Register';
 import Footer from './sections/Footer';
 import { Navigate, useNavigate } from "react-router-dom";
+import Roadmap from './sections/Roadmap';
 
 const About = () => {
 
@@ -24,6 +25,10 @@ const About = () => {
             <Intro />
 
             <div className='divider wow animate__animated animate__fadeInUp'></div>
+
+            {/* <Roadmap />
+
+            <div className='divider wow animate__animated animate__fadeInUp'></div> */}
 
             <ByWho />
 
