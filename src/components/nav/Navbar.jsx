@@ -41,6 +41,11 @@ const Navbar = () => {
                     Mes médicaments
                     </Link>
                 </li>
+                {/* <li className="nav-item">
+                    <Link className="nav-link" to={"/superviseur"}>
+                    Superviseurs
+                    </Link>
+                </li> */}
                 </ul>
                 <form className="d-flex" data-dashlane-rid="5d565b6790b9a581" data-form-type="">
                     <Link to={"/profil"} className="btn btn-secondary my-2 mx-2 my-sm-0"><i className="fa-solid fa-user"></i></Link>
