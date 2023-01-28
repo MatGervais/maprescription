@@ -8,7 +8,6 @@ import Prescription from './pages/Prescription';
 import AuthContext from './contexts/authContext';
 import Profile from './pages/user/Profile';
 import Supervisor from './pages/Supervisor';
-import QrCode from './pages/QrCode';
 
 
 function App() {
@@ -29,7 +28,6 @@ function App() {
           <Route path="/profil" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/mon-stock" element={<Prescription />} />
-          {/* <Route path="/qr" element={<QrCode />}/> */}
           {/* <Route path="/superviseur" element={<Supervisor />} /> */}
         </Routes>
       </Router>
