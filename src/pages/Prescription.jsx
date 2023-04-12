@@ -27,7 +27,6 @@ const Prescription = () => {
         async function getMeds() {
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           const datas = await axios.get(`${process.env.REACT_APP_API_URL}/api/medication/user/${user?.id}`)
-          console.log(datas.data.medications);
           setMedocs(datas.data.medications)
         }
         getMeds()
